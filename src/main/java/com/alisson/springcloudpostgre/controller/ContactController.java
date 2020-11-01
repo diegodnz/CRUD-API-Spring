@@ -3,6 +3,7 @@ package com.alisson.springcloudpostgre.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,12 +47,10 @@ public class ContactController {
 	public Contact create(@RequestBody Contact contact) {
 		return repository.save(contact);
 	}
-	/* 
-		
+	/* 	 
     "name": "Java",
     "email": "java@gmail.com",
-    "phone": "(111) 111-1111"
-    
+    "phone": "(111) 111-1111"    
 	 */
 	
 	
@@ -70,6 +69,15 @@ public class ContactController {
 	}
 	
 	
+	// Remove a Contact
+	@DeleteMapping(path= {"/{id}"})
+	public ResponseEntity<?> delete(@PathVariable("id") long id) {
+		return repository.findById(id)
+				.map(record -> {
+					repository.deleteById(id);
+					return ResponseEntity.ok().build();
+				}).orElse(ResponseEntity.notFound().build());
+	}
 	
 	
 	
